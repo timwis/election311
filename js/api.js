@@ -5,7 +5,7 @@ api = {
 			base: "http://services.phila.gov/ULRS311/Data/" // Ideally this should allow jsonp. ETA 2012-11-11
 			,location: "Location/"
 			,timeout: 20000
-			,minConfidence: 85
+			,minConfidence: 75
 		}
 		,gisServer: {
 			base: "http://gis.phila.gov/ArcGIS/rest/services/"
@@ -18,6 +18,11 @@ api = {
 			,staticmap: "http://maps.googleapis.com/maps/api/staticmap?zoom=17&size={width}x{height}&sensor=false&center={address}&markers={address}"
 			,width: 260
 			,height: 200
+		}
+		,civicinfo: {
+			base: "https://www.googleapis.com/civicinfo/us_v1/"
+			,voterinfo: "voterinfo/4000/lookup?fields=contests%2CnormalizedInput%2Cstatus&key="
+			,apiKey: "AIzaSyCmJ45zmFdmbe_j7QtgAXLUTNl1gRFzJl4"
 		}
 	}
 	
@@ -63,7 +68,17 @@ api = {
 	}
 	
 	,getCandidates: function(input, successCallback, errorCallback) {
-		successCallback({foo: "bar"});
+		var url = api.config.civicinfo.base + api.config.civicinfo.voterinfo + api.config.civicinfo.apiKey;
+		var body = {address: input};
+		$.ajax({
+			url: url
+			,data: JSON.stringify(body)
+			,type: "POST"
+			,contentType: "application/json"
+			,cache: true
+			,error: errorCallback
+			,success: successCallback
+		});
 	}
 	
 	,getMapUrl: function(address, width, height) {

@@ -73,8 +73,9 @@ var controller = {
 			$(":jqmData(role='content')", page).empty(); // Clear the page
 			setLoading(true);
 			api.getCandidates(input, function(data) {
+				if(DEBUG) console.log(data);
 				setLoading(false);
-				if(data) {
+				if(data && data.status !== undefined && data.status == "success") {
 					// Render results to content area
 					var contentData = data; // this object can be formatted however you like. it gets passed to the template.
 					$(":jqmData(role='content')", page).html(_.template($("#template-candidates").html(), contentData)).trigger("create");

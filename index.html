@@ -41,7 +41,7 @@
 	<script type="text/template" id="template-info">
 		<h2>Election Info</h2>
 		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tempor urna, venenatis euismod enim euismod sed.</p>
-		<p>You can vote from <strong>7am - 8pm</strong></p>
+		<p>Vote on <strong>Tuesday</strong> 11/6 from <strong>7am - 8pm</strong></p>
 		
 		<div data-role="collapsible-set">
 			<div data-role="collapsible">
@@ -53,14 +53,14 @@
 				Proin luctus sodales tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis blandit egestas ullamcorper.
 			</div>
 			<div data-role="collapsible">
-				<h3>Yet Another</h3>
-				Vivamus vehicula lorem cursus odio accumsan vitae pellentesque dui fringilla. Integer eu erat eget nulla pulvinar iaculis.
+				<h3>More Information</h3>
+				For more information on the election, contact the Office of City Commissioner Stephanie Singer at 215-686-3940.
 			</div>
 		</div>
 	</script>
 	
 	<script type="text/template" id="template-search">
-		Enter the address where you are registered to vote
+		<p>Enter the address where you are registered to vote</p>
 		<form action="<%= action %>">
 			<label for="address" class="ui-hidden-accessible">Address</label>
 			<input type="text" name="address" placeholder="Address">
@@ -70,6 +70,9 @@
 	
 	<script type="text/template" id="template-pollingplace">
 		<h2>Where to Vote</h2>
+		
+		<p>Note: Polling places can change due to emergencies. For confirmation, call 215-686-3940</p>
+		
 		Your address:<br>
 		<%= userAddress %><br><br>
 		
@@ -83,7 +86,17 @@
 	</script>
 	
 	<script type="text/template" id="template-candidates">
-		Candidate page
+		<h2>Candidates</h2>
+		Your Address:<br>
+		<%= normalizedInput.line1 %><br><br>
+		
+		<ul>
+			<% for(i in contests) { %>
+				<li><%= contests[i].office %></li>
+			<% } %>
+		</ul>
+		
+		<a href="#pollingplace" data-role="button" data-icon="arrow-l">Change Address</a>
 	</script>
 	
 	<script type="text/template" id="template-error">
