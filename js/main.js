@@ -1,4 +1,4 @@
-var DEBUG = false;
+var DEBUG = true;
 var cache = {pollingplace: null, candidates: null};
 
 var controller = {
@@ -13,7 +13,11 @@ var controller = {
 		if(cache[pageId] !== undefined) cache[pageId] = null;
 		
 		// Update footer
-		updateFooter(pageId, matchObj);
+		controller.updateFooter(pageId, matchObj);
+	}
+	// Called upon pageshow - use it to focus on the first input field
+	,focusForm: function(eventType, matchObj, ui, page, evt) {
+		$("form input", page).eq(0).focus();
 	}
 	,pollingplace: function(eventType, matchObj, ui, page, evt) {
 		var input = decodeURIComponent(matchObj[1].replace(/\+/g, "%20")).replace(/^\s+|\s+$/g, ""); // Remove invalid chars
@@ -30,30 +34,37 @@ var controller = {
 					
 					// Get the polling place for this latitude/longitude
 					api.getPollingPlace(data.XCoord, data.YCoord, function(data) {
+						if(DEBUG) console.log(data);
 						setLoading(false);
 						if(data) { // If a match was found
 						
 							// Render results to content area
-							var contentData = {userAddress: userAddress, pollingplace: data};
+							var fullAddress = data.ADDRESS + ", Philadelphia, PA";
+							var contentData = {
+								userAddress: userAddress
+								,pollingplace: data
+								,mapUrl: api.getMapUrl(fullAddress)
+								,staticMap: api.getStaticMap(fullAddress)
+							};
 							$(":jqmData(role='content')", page).html(_.template($("#template-pollingplace").html(), contentData)).trigger("create");
 							
 							// Save this so if we come back to this page we don't have to load it again
 							cache.pollingplace = input;
 						} else {
-							// error, polling place not found (TODO)
+							controller.error("A polling place for this address could not be found.", page);
 						}
 					}, function(xhr, status, error) {
-						// error, polling place request failed (TODO)
+						controller.error("An error occured when trying to get your polling place from the database. Please try again.", page, xhr);
 					});
 				} else {
-					// error, no location found within minConfidence (TODO)
+					controller.error("Unable to validate the address you entered. Please enter just the basic street address, i.e. 1234 Market", page);
 				}
 			}, function(xhr, status, error) {
-				// error, geocode request failed (TODO)
+				controller.error("An error occured when trying to validate your address with the database. Please try again.", page, xhr);
 			});
 		}
 		// Update footer
-		updateFooter("pollingplace", matchObj);
+		controller.updateFooter("pollingplace", matchObj);
 	}
 	,candidates: function(eventType, matchObj, ui, page, evt) {
 		var input = decodeURIComponent(matchObj[1].replace(/\+/g, "%20")).replace(/^\s+|\s+$/g, ""); // Remove invalid chars
@@ -71,32 +82,51 @@ var controller = {
 					// Save this so if we come back to this page we don't have to load it again
 					cache.candidates = input;
 				} else {
-					// error, candidate information not found (TODO)
+					controller.error("Candidate information for this address could not be found.", page);
 				}
 			}, function(xhr, status, error) {
-				// error, candidates request failed (TODO)
+				controller.error("An error occured when trying to get candidate information from the database. Please try again.", page, xhr);
 			});
 		}
 		// Update footer
-		updateFooter("candidates", matchObj);
+		controller.updateFooter("candidates", matchObj);
 	}
 	,info: function(eventType, matchObj, ui, page, evt) {
+		// Render content
+		$(":jqmData(role='content')", page).html(_.template($("#template-info").html())).trigger("create");
+		
 		// Update footer
-		updateFooter("info", matchObj);
+		controller.updateFooter("info", matchObj);
+	}
+	,error: function(msg, page, xhr) {
+		setLoading(false);
+		var errorData = {msg: msg, xhr: xhr || null};
+		$(":jqmData(role='content')", page).html(_.template($("#template-error").html(), errorData)).trigger("create");
+	}
+	,updateFooter: function(activePage, matchObj) {
+		var footerData = {activePage: activePage, queryString: matchObj.input.match(/\?.*/)};
+		$(":jqmData(role='footer')").html(_.template($("#template-footer").html(), footerData)).trigger("create");
 	}
 }
 
-new $.mobile.Router({
-	"#info": { handler: "info", events: "bs" }
-	,"#pollingplace\\?address=(.*)": { handler: "pollingplace", events: "bs" }
-	,"#candidates\\?address=(.*)": { handler: "candidates", events: "bs" }
-	,"#(pollingplace|candidates)$": { handler: "search", events: "bs" }
-}, controller);
+new $.mobile.Router([
+	{"#info": { handler: "info", events: "bs" }}
+	,{"#pollingplace\\?address=(.*)": { handler: "pollingplace", events: "bs" }}
+	,{"#candidates\\?address=(.*)": { handler: "candidates", events: "bs" }}
+	,{"#(pollingplace|candidates)$": { handler: "search", events: "bs" }}
+	,{"#(pollingplace|candidates)$": { handler: "focusForm", events: "s" }} // On pageshow, focus on first field
+], controller);
 
-function updateFooter(activePage, matchObj) {
-	var footerData = {activePage: activePage, queryString: matchObj.input.match(/\?.*/)};
-	$(":jqmData(role='footer')").html(_.template($("#template-footer").html(), footerData)).trigger("create");
-}
+$(document).ready(function() {
+    // Ensure user has input an address before pressing search
+	$(":jqmData(role='content') form").submit(function(e) {
+		var inputNode = $("input[name=\"address\"]", $(this));
+		if( ! $.trim(inputNode.val())) {
+			inputNode.focus();
+			return false;
+		}
+	});
+});
 
 // Necessary because v1.1.0 of jQuery Mobile doesn't seem to let you show the loading message during pagebeforeshow
 function setLoading(on) {

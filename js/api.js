@@ -10,8 +10,14 @@ api = {
 		,gisServer: {
 			base: "http://gis.phila.gov/ArcGIS/rest/services/"
 			,pollingPlaces: "PhilaGov/PollingPlaces/MapServer/1/"
-			,defaultParams: "query?geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelWithin&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&outFields=WARD_1%2CDIVISION_1%2CPOLLING_PL%2CADDRESS%2CBUILDING_A%2CPARKING_AC&f=pjson&geometry="
+			,defaultParams: "query?geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelWithin&returnCountOnly=false&returnIdsOnly=false&returnGeometry=false&outFields=WARD_1%2CDIVISION_1%2CPOLLING_PL%2CADDRESS&f=pjson&geometry="
 			,timeout: 20000
+		}
+		,gmaps: {
+			query: "http://maps.google.com/maps?q="
+			,staticmap: "http://maps.googleapis.com/maps/api/staticmap?zoom=17&size={width}x{height}&sensor=false&center={address}&markers={address}"
+			,width: 260
+			,height: 200
 		}
 	}
 	
@@ -58,5 +64,13 @@ api = {
 	
 	,getCandidates: function(input, successCallback, errorCallback) {
 		successCallback({foo: "bar"});
+	}
+	
+	,getMapUrl: function(address, width, height) {
+		return api.config.gmaps.query + encodeURIComponent(address);
+	}
+	
+	,getStaticMap: function(address) {
+		return api.config.gmaps.staticmap.replace(/{address}/g, encodeURIComponent(address)).replace("{width}", api.config.gmaps.width).replace("{height}", api.config.gmaps.height);
 	}
 }

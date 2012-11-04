@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css">
+	<link rel="stylesheet" href="css/styles.css">
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="js/jquery.mobile.router.min.js" type="text/javascript"></script>
@@ -13,26 +14,7 @@
 <body>
 
 	<div data-role="page" id="info">
-		<div data-role="content">
-			<h2>Election Info</h2>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tempor urna, venenatis euismod enim euismod sed.</p>
-			<p>You can vote from <strong>7am - 8pm</strong></p>
-			
-			<div data-role="collapsible-set">
-				<div data-role="collapsible">
-					<h3>Voter ID</h3>
-					Nunc mi leo, dapibus a vehicula non, consectetur eget nisl. Vestibulum ligula eros, dictum molestie feugiat eu, porta quis mauris. Sed varius quam vel nisi luctus commodo.
-				</div>
-				<div data-role="collapsible">
-					<h3>Another Section</h3>
-					Proin luctus sodales tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis blandit egestas ullamcorper.
-				</div>
-				<div data-role="collapsible">
-					<h3>Yet Another</h3>
-					Vivamus vehicula lorem cursus odio accumsan vitae pellentesque dui fringilla. Integer eu erat eget nulla pulvinar iaculis.
-				</div>
-			</div>
-		</div>
+		<div data-role="content"></div>
 		<div data-role="footer" data-position="fixed" data-theme="b" data-id="foot"></div>
 	</div>
 
@@ -49,10 +31,31 @@
 	<script type="text/template" id="template-footer">
 		<div data-role="navbar">
 			<ul>
-				<li><a href="#info<%= queryString %>" data-icon="grid"<% if(activePage == "info") { %> class="ui-btn-active ui-state-persist"<% } %>>Info</a></li>
-				<li><a href="#pollingplace<%= queryString %>" data-icon="home"<% if(activePage == "pollingplace") { %> class="ui-btn-active ui-state-persist"<% } %>>Polling Place</a></li>
+				<li><a href="#info<%= queryString %>" data-icon="info"<% if(activePage == "info") { %> class="ui-btn-active ui-state-persist"<% } %>>Info</a></li>
+				<li><a href="#pollingplace<%= queryString %>" data-icon="home"<% if(activePage == "pollingplace") { %> class="ui-btn-active ui-state-persist"<% } %>>Where to Vote</a></li>
 				<li><a href="#candidates<%= queryString %>" data-icon="star"<% if(activePage == "candidates") { %> class="ui-btn-active ui-state-persist"<% } %>>Candidates</a></li>
 			</ul>
+		</div>
+	</script>
+	
+	<script type="text/template" id="template-info">
+		<h2>Election Info</h2>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tempor urna, venenatis euismod enim euismod sed.</p>
+		<p>You can vote from <strong>7am - 8pm</strong></p>
+		
+		<div data-role="collapsible-set">
+			<div data-role="collapsible">
+				<h3>Voter ID</h3>
+				Nunc mi leo, dapibus a vehicula non, consectetur eget nisl. Vestibulum ligula eros, dictum molestie feugiat eu, porta quis mauris. Sed varius quam vel nisi luctus commodo.
+			</div>
+			<div data-role="collapsible">
+				<h3>Another Section</h3>
+				Proin luctus sodales tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis blandit egestas ullamcorper.
+			</div>
+			<div data-role="collapsible">
+				<h3>Yet Another</h3>
+				Vivamus vehicula lorem cursus odio accumsan vitae pellentesque dui fringilla. Integer eu erat eget nulla pulvinar iaculis.
+			</div>
 		</div>
 	</script>
 	
@@ -66,21 +69,34 @@
 	</script>
 	
 	<script type="text/template" id="template-pollingplace">
-		<h2><%= userAddress %></h2>
-		Ward <%= pollingplace.WARD_1 %> Division <%= pollingplace.DIVISION_1 %><br><br>
+		<h2>Where to Vote</h2>
+		Your address:<br>
+		<%= userAddress %><br><br>
 		
 		Vote at:<br>
-		<%= pollingplace.POLLING_PL %><br>
-		<%= pollingplace.ADDRESS %><br><br>
+		<a href="<%= mapUrl %>"><%= pollingplace.POLLING_PL %><br>
+		<%= pollingplace.ADDRESS %></a><br><br>
 		
-		Building Accessible: <%= pollingplace.BUILDING_A %><br>
-		Parking Accessible: <%= pollingplace.PARKING_AC %><br><br>
+		<a href="<%= mapUrl %>"><img src="<%= staticMap %>"></a>
 		
 		<a href="#pollingplace" data-role="button" data-icon="arrow-l">Change Address</a>
 	</script>
 	
 	<script type="text/template" id="template-candidates">
 		Candidate page
+	</script>
+	
+	<script type="text/template" id="template-error">
+		<h2>Error</h2>
+		<%= msg %><br>		
+		<% if(xhr && xhr.status !== undefined && xhr.statusText !== undefined) { %>
+			<small>(Error Code: <%= xhr.status %> <%= xhr.statusText %>)</small><br><br>
+		<% } %>
+		
+		Election Information:<br>
+		215-686-3940<br><br>
+		
+		<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 	</script>
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
