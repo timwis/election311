@@ -90,12 +90,33 @@
 		Your Address:<br>
 		<%= normalizedInput.line1 %><br><br>
 		
-		<ul>
+		<div data-role="collapsible-set">
 			<% for(i in contests) { %>
-				<li><%= contests[i].office %></li>
+				<div data-role="collapsible">
+					<h3><%= contests[i].office %></h3>
+						<% for(j in contests[i].candidates) { %>
+							<ul>
+								<li><b><%= contests[i].candidates[j].name %></b> (<%= contests[i].candidates[j].party %> party)</li>
+								<ul>
+									<% if(contests[i].candidates[j].candidateUrl) { %>
+										<li>Website: <a href="<%= contests[i].candidates[j].candidateUrl %>"><%= contests[i].candidates[j].candidateUrl %></a></li>
+									<% } %>
+									<% if(contests[i].candidates[j].phone) { %>
+										<li>Phone: <%= contests[i].candidates[j].phone %></li>
+									<% } %>
+									<% if(contests[i].candidates[j].email) { %>
+										<li>Email: <a href="mailto:<%= contests[i].candidates[j].email %>"><%= contests[i].candidates[j].email %></a></li>
+									<% } %>
+									<li>Social Media: 
+										<% for(k in contests[i].candidates[j].channels) { %>
+											<a href="<%= contests[i].candidates[j].channels[k].id %>"><%= contests[i].candidates[j].channels[k].type %></a>
+									<% } %></li>
+								</ul>
+							</ul>
+						<% } %>
+				</div>
 			<% } %>
-		</ul>
-		
+		</div>		
 		<a href="#pollingplace" data-role="button" data-icon="arrow-l">Change Address</a>
 	</script>
 	
