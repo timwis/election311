@@ -139,40 +139,6 @@
 		<a href="#candidates" data-role="button" data-icon="arrow-l">Change Address</a>
 	</script>
 	
-	<script type="text/template" id="template-candidates1">
-		<h2>Candidates</h2>
-		Your Address:<br>
-		<%= normalizedInput.line1 %><br><br>
-		
-		<div data-role="collapsible-set">
-		<% for(i in contests) { %>
-			<div data-role="collapsible" data-inset="false">
-				<h3><%= contests[i].office %></h3>
-				<div data-role="collapsible-set">
-				<% for(ii in contests[i].candidates) { %>
-					<% var candidate = contests[i].candidates[ii]; %>
-					<div data-role="collapsible" data-theme="<% if(candidate.party == "Democratic") { %>b<% } else if(candidate.party == "Republican") { %>f<% } else { %>e<% } %>">
-						<h3><%= candidate.name %></h3>
-						<%= candidate.party %> Party<br>
-						<% if(candidate.candidateUrl !== undefined) { %>
-							<a href="<%= candidate.candidateUrl %>" target="_blank" title="Website" class="channel" data-icon="Website"></a>
-						<% } %>
-						<% if(candidate.email !== undefined) { %>
-							<a href="mailto:<%= candidate.email %>" target="_blank" title="Email" class="channel" data-icon="Email"></a>
-						<% } %>
-						<% for(iii in candidate.channels) { %>
-							<a href="<%= candidate.channels[iii].id %>" target="_blank" title="<%= candidate.channels[iii].type %>" class="channel" data-icon="<%= candidate.channels[iii].type %>"></a>
-						<% } %>
-					</div>
-				<% } %>
-				</div>
-			</div>
-		<% } %>
-		</div>
-		
-		<a href="#candidates" data-role="button" data-icon="arrow-l">Change Address</a>
-	</script>
-	
 	<script type="text/template" id="template-questions">
 		<ol>
 		<% for(i in questions) { %>
