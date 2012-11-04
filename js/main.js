@@ -1,23 +1,16 @@
 var DEBUG = true;
-var cache = {
-	pollingplace: {input: null, language: null}
-	,candidates: {input: null, language: null}
-};
-var language = "en";
+var cache = {pollingplace: null, candidates: null};
 
 var controller = {
 	search: function(eventType, matchObj, ui, page, evt) {
 		var pageId = matchObj[1];
 		
 		// Add search form to whatever page we're on
-		var contentData = {
-			action: "#" + pageId
-			,d: function(key) {return dict.lookup("search", key, language);}
-		};
+		var contentData = {action: "#" + pageId};
 		$(":jqmData(role='content')", page).empty().html(_.template($("#template-search").html(), contentData)).trigger("create");
 		
 		// Reset cache since we just changed the page contents
-		cache[pageId] = {input: null, language: null};
+		if(cache[pageId] !== undefined) cache[pageId] = null;
 		
 		// Update footer
 		controller.updateFooter(pageId, matchObj);
@@ -29,7 +22,7 @@ var controller = {
 	,pollingplace: function(eventType, matchObj, ui, page, evt) {
 		var input = decodeURIComponent(matchObj[1].replace(/\+/g, "%20")).replace(/^\s+|\s+$/g, ""); // Remove invalid chars
 		
-		if(input != cache.pollingplace.input || language != cache.pollingplace.language) { // If we haven't already shown results for this address
+		if(input != cache.pollingplace) { // If we haven't already shown results for this address
 			$(":jqmData(role='content')", page).empty(); // Clear the page
 			setLoading(true);
 			
@@ -52,23 +45,22 @@ var controller = {
 								,pollingplace: data
 								,mapUrl: api.getMapUrl(fullAddress)
 								,staticMap: api.getStaticMap(fullAddress)
-								,d: function(key) {return dict.lookup("pollingplace", key, language);}
 							};
 							$(":jqmData(role='content')", page).html(_.template($("#template-pollingplace").html(), contentData)).trigger("create");
 							
 							// Save this so if we come back to this page we don't have to load it again
-							cache.pollingplace = {input: input, language: language};
+							cache.pollingplace = input;
 						} else {
-							controller.error("pollingPlaceEmpty", page);
+							controller.error("A polling place for this address could not be found.", page);
 						}
 					}, function(xhr, status, error) {
-						controller.error("pollingPlaceFailed", page, xhr);
+						controller.error("An error occured when trying to get your polling place from the database. Please try again.", page, xhr);
 					});
 				} else {
-					controller.error("geocodeEmpty", page);
+					controller.error("Unable to validate the address you entered. Please enter just the basic street address, i.e. 1234 Market", page);
 				}
 			}, function(xhr, status, error) {
-				controller.error("geocodeFailed", page, xhr);
+				controller.error("An error occured when trying to validate your address with the database. Please try again.", page, xhr);
 			});
 		}
 		// Update footer
@@ -77,26 +69,23 @@ var controller = {
 	,candidates: function(eventType, matchObj, ui, page, evt) {
 		var input = decodeURIComponent(matchObj[1].replace(/\+/g, "%20")).replace(/^\s+|\s+$/g, ""); // Remove invalid chars
 		
-		if(input != cache.candidates.input || language != cache.candidates.language) { // If we haven't already shown results for this address
+		if(input != cache.candidates) { // If we haven't already shown results for this address
 			$(":jqmData(role='content')", page).empty(); // Clear the page
 			setLoading(true);
 			api.getCandidates(input, function(data) {
 				setLoading(false);
 				if(data) {
 					// Render results to content area
-					var contentData = { // this object can be formatted however you like. it gets passed to the template.
-						candidates: data
-						,d: function(key) {return dict.lookup("candidates", key, language);}
-					};
+					var contentData = data; // this object can be formatted however you like. it gets passed to the template.
 					$(":jqmData(role='content')", page).html(_.template($("#template-candidates").html(), contentData)).trigger("create");
 					
 					// Save this so if we come back to this page we don't have to load it again
-					cache.candidates = {input: input, language: language};
+					cache.candidates = input;
 				} else {
-					controller.error("candidatesEmpty", page);
+					controller.error("Candidate information for this address could not be found.", page);
 				}
 			}, function(xhr, status, error) {
-				controller.error("candidatesFailed", page, xhr);
+				controller.error("An error occured when trying to get candidate information from the database. Please try again.", page, xhr);
 			});
 		}
 		// Update footer
@@ -104,33 +93,18 @@ var controller = {
 	}
 	,info: function(eventType, matchObj, ui, page, evt) {
 		// Render content
-		var contentData = {d: function(key) {return dict.lookup("info", key, language);}};
-		$(":jqmData(role='content')", page).html(_.template($("#template-info").html(), contentData)).trigger("create");
+		$(":jqmData(role='content')", page).html(_.template($("#template-info").html())).trigger("create");
 		
 		// Update footer
 		controller.updateFooter("info", matchObj);
 	}
 	,error: function(msg, page, xhr) {
 		setLoading(false);
-		var errorData = {
-			msg: msg
-			,xhr: xhr || null
-			,d: function(key) {return dict.lookup("error", key, language);}
-		};
+		var errorData = {msg: msg, xhr: xhr || null};
 		$(":jqmData(role='content')", page).html(_.template($("#template-error").html(), errorData)).trigger("create");
 	}
 	,updateFooter: function(currentPage, matchObj) {
-		var headerData = {
-			currentPath: matchObj.input
-			,currentLanguage: language
-		};
-		$(":jqmData(role='header-options')").html(_.template($("#template-header").html(), headerData)).trigger("create");
-		
-		var footerData = {
-			currentPage: currentPage
-			,queryString: matchObj.input.match(/\?.*/)
-			,d: function(key) {return dict.lookup("footer", key, language);}
-		};
+		var footerData = {currentPage: currentPage, queryString: matchObj.input.match(/\?.*/)};
 		$(":jqmData(role='footer')").html(_.template($("#template-footer").html(), footerData)).trigger("create");
 	}
 }
