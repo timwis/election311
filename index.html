@@ -14,16 +14,19 @@
 <body>
 
 	<div data-role="page" id="info">
+		<div data-role="header-options"></div>
 		<div data-role="content"></div>
 		<div data-role="footer" data-position="fixed" data-theme="b" data-id="foot"></div>
 	</div>
 
 	<div data-role="page" id="pollingplace">
+		<div data-role="header-options"></div>
 		<div data-role="content"></div>
 		<div data-role="footer" data-position="fixed" data-theme="b" data-id="foot"></div>
 	</div>
 
 	<div data-role="page" id="candidates">
+		<div data-role="header-options"></div>
 		<div data-role="content"></div>
 		<div data-role="footer" data-position="fixed" data-theme="b" data-id="foot"></div>
 	</div>
@@ -31,22 +34,29 @@
 	<script type="text/template" id="template-footer">
 		<div data-role="navbar">
 			<ul>
-				<li><a href="#info<%= queryString %>" data-icon="info"<% if(currentPage == "info") { %> class="ui-btn-active ui-state-persist"<% } %>>Info</a></li>
-				<li><a href="#pollingplace<%= currentPage != "pollingplace" ? queryString : "" %>" data-icon="home"<% if(currentPage == "pollingplace") { %> class="ui-btn-active ui-state-persist"<% } %>>Where to Vote</a></li>
-				<li><a href="#candidates<%= currentPage != "candidates" ? queryString : ""  %>" data-icon="star"<% if(currentPage == "candidates") { %> class="ui-btn-active ui-state-persist"<% } %>>Candidates</a></li>
+				<li><a href="#info<%= queryString %>" data-icon="info"<% if(currentPage == "info") { %> class="ui-btn-active ui-state-persist"<% } %>><%= d("info") %></a></li>
+				<li><a href="#pollingplace<%= currentPage != "pollingplace" ? queryString : "" %>" data-icon="home"<% if(currentPage == "pollingplace") { %> class="ui-btn-active ui-state-persist"<% } %>><%= d("where") %></a></li>
+				<li><a href="#candidates<%= currentPage != "candidates" ? queryString : ""  %>" data-icon="star"<% if(currentPage == "candidates") { %> class="ui-btn-active ui-state-persist"<% } %>><%= d("candidates") %></a></li>
 			</ul>
 		</div>
 	</script>
 	
+	<script type="text/template" id="template-header">
+		<div data-role="controlgroup" data-type="horizontal" data-mini="true">
+			<a href="<%= currentPath %>" data-lang="en"<% if(currentLanguage == "en") { %> class="ui-btn-active ui-state-persist"<% }%> data-role="button">English</a>
+			<a href="<%= currentPath %>" data-lang="es"<% if(currentLanguage == "es") { %> class="ui-btn-active ui-state-persist"<% }%> data-role="button">Espa&ntilde;ol</a>
+		</div>
+	</script>
+	
 	<script type="text/template" id="template-info">
-		<h2>Election Info</h2>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tempor urna, venenatis euismod enim euismod sed.</p>
-		<p>You can vote from <strong>7am - 8pm</strong></p>
+		<h2><%= d("title") %></h2>
+		<p><%= d("intro") %></p>
+		<p><%= d("when") %></p>
 		
 		<div data-role="collapsible-set">
 			<div data-role="collapsible">
-				<h3>Voter ID</h3>
-				Nunc mi leo, dapibus a vehicula non, consectetur eget nisl. Vestibulum ligula eros, dictum molestie feugiat eu, porta quis mauris. Sed varius quam vel nisi luctus commodo.
+				<h3><%= d("voteridTitle") %></h3>
+				<%= d("voteridContent") %>
 			</div>
 			<div data-role="collapsible">
 				<h3>Another Section</h3>
@@ -60,26 +70,26 @@
 	</script>
 	
 	<script type="text/template" id="template-search">
-		Enter the address where you are registered to vote
+		<%= d("prompt") %>
 		<form action="<%= action %>">
-			<label for="address" class="ui-hidden-accessible">Address</label>
-			<input type="text" name="address" placeholder="Address">
-			<button type="submit" data-theme="b">Search</button>
+			<label for="address" class="ui-hidden-accessible"><%= d("address") %></label>
+			<input type="text" name="address" placeholder="<%= d("address") %>">
+			<button type="submit" data-theme="b"><%= d("search") %></button>
 		</form>
 	</script>
 	
 	<script type="text/template" id="template-pollingplace">
-		<h2>Where to Vote</h2>
-		Your address:<br>
+		<h2><%= d("title") %></h2>
+		<%= d("yourAddress") %>:<br>
 		<%= userAddress %><br><br>
 		
-		Vote at:<br>
-		<a href="<%= mapUrl %>"><%= pollingplace.POLLING_PL %><br>
+		<%= d("voteAt") %>:<br>
+		<a href="<%= mapUrl %>" target="_blank"><%= pollingplace.POLLING_PL %><br>
 		<%= pollingplace.ADDRESS %></a><br><br>
 		
-		<a href="<%= mapUrl %>"><img src="<%= staticMap %>"></a>
+		<a href="<%= mapUrl %>" target="_blank"><img src="<%= staticMap %>"></a>
 		
-		<a href="#pollingplace" data-role="button" data-icon="arrow-l">Change Address</a>
+		<a href="#pollingplace" data-role="button" data-icon="arrow-l"><%= d("changeAddress") %></a>
 	</script>
 	
 	<script type="text/template" id="template-candidates">
@@ -87,20 +97,22 @@
 	</script>
 	
 	<script type="text/template" id="template-error">
-		<h2>Error</h2>
-		<%= msg %><br>		
+		<h2><%= d("title") %></h2>
+		<%= d(msg) %><br>		
 		<% if(xhr && xhr.status !== undefined && xhr.statusText !== undefined) { %>
-			<small>(Error Code: <%= xhr.status %> <%= xhr.statusText %>)</small><br><br>
+			<small>(<%= d("errorCode") %>: <%= xhr.status %> <%= xhr.statusText %>)</small><br><br>
 		<% } %>
+		<br>
 		
-		Election Information:<br>
+		<%= d("info") %>:<br>
 		215-686-3940<br><br>
 		
-		<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+		<a href="#" data-role="button" data-rel="back" data-icon="arrow-l"><%= d("back") %></a>
 	</script>
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
 	<script src="js/main.js" type="text/javascript"></script><!-- No need to load this before the page is rendered -->
 	<script src="js/api.js" type="text/javascript"></script>
+	<script src="js/dict.js" type="text/javascript"></script>
 </body>
 </html>
