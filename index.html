@@ -97,16 +97,17 @@
 	</script>
 	
 	<script type="text/template" id="template-error">
-		<h2>Error</h2>
-		<%= msg %><br>		
+		<h2><%= d("title") %></h2>
+		<%= d(msg) %><br>		
 		<% if(xhr && xhr.status !== undefined && xhr.statusText !== undefined) { %>
-			<small>(Error Code: <%= xhr.status %> <%= xhr.statusText %>)</small><br><br>
+			<small>(<%= d("errorCode") %>: <%= xhr.status %> <%= xhr.statusText %>)</small><br><br>
 		<% } %>
+		<br>
 		
-		Election Information:<br>
+		<%= d("info") %>:<br>
 		215-686-3940<br><br>
 		
-		<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+		<a href="#" data-role="button" data-rel="back" data-icon="arrow-l"><%= d("back") %></a>
 	</script>
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>

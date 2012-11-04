@@ -76,4 +76,46 @@ dict = {
 	}
 	,candidates: {
 	}
+	,error: {
+		title: {
+			en: "Error"
+			,es: "Error"
+		}
+		,errorCode: {
+			en: "Error Code"
+			,es: "Error Code"
+		}
+		,info: {
+			en: "Election Information"
+			,es: "Informaci&oacute;n Electoral"
+		}
+		,back: {
+			en: "Back"
+			,es: "Regresar"
+		}
+		,pollingPlaceEmpty: {
+			en: "A polling place for this address could not be found."
+			,es: "~A polling place for this address could not be found."
+		}
+		,pollingPlaceFailed: {
+			en: "An error occured when trying to get your polling place from the database. Please try again."
+			,es: "~An error occured when trying to get your polling place from the database. Please try again."
+		}
+		,geocodeEmpty: {
+			en: "Unable to validate the address you entered. Please enter just the basic street address, i.e. 1234 Market"
+			,es: "~Unable to validate the address you entered. Please enter just the basic street address, i.e. 1234 Market"
+		}
+		,geocodeFailed: {
+			en: "An error occured when trying to validate your address with the database. Please try again."
+			,es: "~An error occured when trying to validate your address with the database. Please try again."
+		}
+		,candidatesEmpty: {
+			en: "Candidate information for this address could not be found."
+			,es: "~Candidate information for this address could not be found."
+		}
+		,candidatesFailed: {
+			en: "An error occured when trying to get candidate information from the database. Please try again."
+			,es: "~An error occured when trying to get candidate information from the database. Please try again."
+		}
+	}
 }

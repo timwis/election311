@@ -59,16 +59,16 @@ var controller = {
 							// Save this so if we come back to this page we don't have to load it again
 							cache.pollingplace = {input: input, language: language};
 						} else {
-							controller.error("A polling place for this address could not be found.", page);
+							controller.error("pollingPlaceEmpty", page);
 						}
 					}, function(xhr, status, error) {
-						controller.error("An error occured when trying to get your polling place from the database. Please try again.", page, xhr);
+						controller.error("pollingPlaceFailed", page, xhr);
 					});
 				} else {
-					controller.error("Unable to validate the address you entered. Please enter just the basic street address, i.e. 1234 Market", page);
+					controller.error("geocodeEmpty", page);
 				}
 			}, function(xhr, status, error) {
-				controller.error("An error occured when trying to validate your address with the database. Please try again.", page, xhr);
+				controller.error("geocodeFailed", page, xhr);
 			});
 		}
 		// Update footer
@@ -93,10 +93,10 @@ var controller = {
 					// Save this so if we come back to this page we don't have to load it again
 					cache.candidates = {input: input, language: language};
 				} else {
-					controller.error("Candidate information for this address could not be found.", page);
+					controller.error("candidatesEmpty", page);
 				}
 			}, function(xhr, status, error) {
-				controller.error("An error occured when trying to get candidate information from the database. Please try again.", page, xhr);
+				controller.error("candidatesFailed", page, xhr);
 			});
 		}
 		// Update footer
