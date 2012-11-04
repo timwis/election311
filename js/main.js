@@ -126,13 +126,6 @@ $(document).ready(function() {
 			return false;
 		}
 	});
-	
-	$(":jqmData(role='header-options') a:jqmData(lang)").live("click", function(e) {
-		if(DEBUG) console.log("Changing language from " + language + " to " + $(this).data("lang"));
-		language = $(this).data("lang");
-		$.mobile.changePage($(this).attr("href"), {allowSamePageTransition: true});
-		return false;
-	});
 });
 
 // Necessary because v1.1.0 of jQuery Mobile doesn't seem to let you show the loading message during pagebeforeshow
