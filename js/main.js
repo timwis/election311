@@ -39,7 +39,7 @@ var controller = {
 						if(data) { // If a match was found
 						
 							// Render results to content area
-							var fullAddress = data.ADDRESS + ", Philadelphia, PA";
+							var fullAddress = addCityState(data.ADDRESS);
 							var contentData = {
 								userAddress: userAddress
 								,pollingplace: data
@@ -68,6 +68,7 @@ var controller = {
 	}
 	,candidates: function(eventType, matchObj, ui, page, evt) {
 		var input = decodeURIComponent(matchObj[1].replace(/\+/g, "%20")).replace(/^\s+|\s+$/g, ""); // Remove invalid chars
+		input = addCityState(input); // add ", Philadelphia, PA" for google
 		
 		if(input != cache.candidates) { // If we haven't already shown results for this address
 			$(":jqmData(role='content')", page).empty(); // Clear the page
@@ -89,7 +90,19 @@ var controller = {
 				controller.error("An error occured when trying to get candidate information from the database. Please try again.", page, xhr);
 			});
 		}
-		// Update footer
+		// Update header & footer
+		controller.updateHeader("candidates", matchObj);
+		controller.updateFooter("candidates", matchObj);
+	}
+	,questions: function(eventType, matchObj, ui, page, evt) {
+		// Render results to content area
+		var contentData = {
+			questions: questions
+		};
+		$(":jqmData(role='content')", page).html(_.template($("#template-questions").html(), contentData)).trigger("create");
+		
+		// Update header & footer
+		controller.updateHeader("questions", matchObj);
 		controller.updateFooter("candidates", matchObj);
 	}
 	,info: function(eventType, matchObj, ui, page, evt) {
@@ -108,10 +121,15 @@ var controller = {
 		var footerData = {currentPage: currentPage, queryString: matchObj.input.match(/\?.*/)};
 		$(":jqmData(role='footer')").html(_.template($("#template-footer").html(), footerData)).trigger("create");
 	}
+	,updateHeader: function(currentPage, matchObj) {
+		var headerData = {currentPage: currentPage, queryString: matchObj.input.match(/\?.*/)};
+		$(":jqmData(role='header-options')").html(_.template($("#template-header").html(), headerData)).trigger("create");
+	}
 }
 
 var router = router || new $.mobile.Router([
 	{"#info": { handler: "info", events: "bs" }}
+	,{"#questions": { handler: "questions", events: "bs" }}
 	,{"#pollingplace\\?address=(.*)": { handler: "pollingplace", events: "bs" }}
 	,{"#candidates\\?address=(.*)": { handler: "candidates", events: "bs" }}
 	,{"#(pollingplace|candidates)$": { handler: "search", events: "bs" }}
@@ -133,4 +151,12 @@ $(document).ready(function() {
 function setLoading(on) {
 	if(on) $("body").addClass("ui-loading");
 	else $("body").removeClass("ui-loading");
+}
+
+function addCityState(input) {
+	var comma = input.indexOf(",");
+	if(comma > -1) {
+		input = input.substr(0, comma);
+	}
+	return input + ", Philadelphia, PA";
 }
