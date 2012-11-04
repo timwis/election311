@@ -105,6 +105,45 @@
 		Your Address:<br>
 		<%= normalizedInput.line1 %><br><br>
 		
+		<ul data-role="listview">
+		<% for(i in contests) { %>
+			<li>
+				<span><%= contests[i].office %></span>
+				<ul>
+				<% for(ii in contests[i].candidates) { %>
+					<% var candidate = contests[i].candidates[ii]; %>
+					<li>
+						<h3><%= candidate.name %></h3>
+						<p style="white-space: normal">
+						<%= candidate.party %> Party<br>
+						<% if(candidate.candidateUrl !== undefined) { %>
+							<a href="<%= candidate.candidateUrl %>" target="_blank" title="Website" class="channel"><img src="icons/Website.png"></a>
+						<% } %>
+						<% if(candidate.email !== undefined) { %>
+							<a href="mailto:<%= candidate.email %>" target="_blank" title="Email" class="channel"><img src="icons/Email.png"></a>
+						<% } %>
+						<% if(candidate.phone !== undefined) { %>
+							<a href="tel:1<%= candidate.phone.replace(/\D/g, "") %>" target="_blank" title="Phone" class="channel"><img src="icons/Phone.png"></a>
+						<% } %>
+						<% for(iii in candidate.channels) { %>
+							<a href="<%= candidate.channels[iii].id %>" target="_blank" title="<%= candidate.channels[iii].type %>" class="channel"><img src="icons/<%= candidate.channels[iii].type %>.png"></a>
+						<% } %>
+						</p>
+					</li>
+				<% } %>
+				</ul>
+			</li>
+		<% } %>
+		</ul>
+		<br>
+		<a href="#candidates" data-role="button" data-icon="arrow-l">Change Address</a>
+	</script>
+	
+	<script type="text/template" id="template-candidates1">
+		<h2>Candidates</h2>
+		Your Address:<br>
+		<%= normalizedInput.line1 %><br><br>
+		
 		<div data-role="collapsible-set">
 		<% for(i in contests) { %>
 			<div data-role="collapsible" data-inset="false">
@@ -116,13 +155,13 @@
 						<h3><%= candidate.name %></h3>
 						<%= candidate.party %> Party<br>
 						<% if(candidate.candidateUrl !== undefined) { %>
-							<a href="<%= candidate.candidateUrl %>" target="_blank" title="Web Site" data-icon="grid" data-role="button" data-inline="true" data-mini="true">Web</a>
+							<a href="<%= candidate.candidateUrl %>" target="_blank" title="Website" class="channel" data-icon="Website"></a>
 						<% } %>
 						<% if(candidate.email !== undefined) { %>
-							<a href="mailto:<%= candidate.email %>" target="_blank" title="Email">Email</a>
+							<a href="mailto:<%= candidate.email %>" target="_blank" title="Email" class="channel" data-icon="Email"></a>
 						<% } %>
 						<% for(iii in candidate.channels) { %>
-							<a href="<%= candidate.channels[iii].id %>" target="_blank" title="<%= candidate.channels[iii].type %>"><%= candidate.channels[iii].type %></a>
+							<a href="<%= candidate.channels[iii].id %>" target="_blank" title="<%= candidate.channels[iii].type %>" class="channel" data-icon="<%= candidate.channels[iii].type %>"></a>
 						<% } %>
 					</div>
 				<% } %>
