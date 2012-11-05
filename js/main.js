@@ -54,13 +54,13 @@ var controller = {
 							controller.error("A polling place for this address could not be found.", page);
 						}
 					}, function(xhr, status, error) {
-						controller.error("An error occured when trying to get your polling place from the database. Please try again.", page, xhr);
+						controller.error("An error occurred when trying to get your polling place from the database. Please try again.", page, xhr);
 					});
 				} else {
 					controller.error("Unable to validate the address you entered. Please enter just the basic street address, i.e. 1234 Market", page);
 				}
 			}, function(xhr, status, error) {
-				controller.error("An error occured when trying to validate your address with the database. Please try again.", page, xhr);
+				controller.error("An error occurred when trying to validate your address with the database. Please try again.", page, xhr);
 			});
 		}
 		// Update footer
@@ -87,7 +87,7 @@ var controller = {
 					controller.error("Candidate information for this address could not be found.", page);
 				}
 			}, function(xhr, status, error) {
-				controller.error("An error occured when trying to get candidate information from the database. Please try again.", page, xhr);
+				controller.error("An error occurred when trying to get candidate information from the database. Please try again.", page, xhr);
 			});
 		}
 		// Update header & footer
