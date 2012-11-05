@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Election Information</title>
+    <title>Election Information</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css">
@@ -14,14 +14,6 @@
 		$(document).bind("mobileinit", function() {$.mobile.page.prototype.options.addBackBtn = true;}); // Add back button to nested lists
 	</script>
 	<script src="//code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
-	<script type="text/javascript">
-	var _gaq = _gaq || [];
-	(function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-	</script>
 </head>
 <body>
 
@@ -66,21 +58,38 @@
 	
 	<script type="text/template" id="template-info">
 		<h2>Election Info</h2>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tempor urna, venenatis euismod enim euismod sed.</p>
 		<p>Vote on <strong>Tuesday</strong> 11/6 from <strong>7am - 8pm</strong></p>
 		
 		<div data-role="collapsible-set">
 			<div data-role="collapsible">
 				<h3>Voter ID</h3>
-				Nunc mi leo, dapibus a vehicula non, consectetur eget nisl. Vestibulum ligula eros, dictum molestie feugiat eu, porta quis mauris. Sed varius quam vel nisi luctus commodo.
+				Due to Pennsylvania's Voter ID Law, voters will be asked, <b>but not required</b>, to show an acceptable photo ID on Election Day, 11/6.<br><br>
+				
+				If it is your <b>first time</b> voting at your polling place, be sure to check what you will need to bring with you in the next section.
 			</div>
 			<div data-role="collapsible">
-				<h3>Another Section</h3>
-				Proin luctus sodales tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis blandit egestas ullamcorper.
+				<h3>First-Time Voters</h3>
+				All voters who appear at a polling place for the first time must show proof of identification (not necessarily photo ID), such as:
+				<ul>
+					<li>Pennsylvania driver's license or PennDOT ID card</li>
+					<li>ID issued by any Commonwealth agency</li>
+					<li>ID issued by the U.S. Government</li>
+					<li>U.S. passport</li>
+					<li>U.S. Armed Forces ID</li>
+					<li>Student ID</li>
+					<li>Employee ID</li>
+					<li>Non-photo ID issued by the Commonwealth</li>
+					<li>Non-photo ID issued by the U.S. Government</li>
+					<li>Firearm permit</li>
+					<li>Current utility bill</li>
+					<li>Current bank statement</li>
+					<li>Current paycheck</li>
+					<li>Government check</li>
+				</ul>
 			</div>
 			<div data-role="collapsible">
 				<h3>More Information</h3>
-				For more information on the election, contact the Office of City Commissioner Stephanie Singer at 215-686-3940.
+				For more information on the election, contact the Office of City Commissioner Stephanie Singer at 215-686-3460 or 215-686-3461.
 			</div>
 		</div>
 	</script>
@@ -97,7 +106,7 @@
 	<script type="text/template" id="template-pollingplace">
 		<h2>Where to Vote</h2>
 		
-		<p>Note: Polling places can change due to emergencies. For confirmation, call 215-686-3940</p>
+		<p>Note: Polling places can change due to emergencies. For confirmation, call 215-686-3460 or 215-686-3461</p>
 		
 		Your address:<br>
 		<a href="#pollingplace" data-role="button" data-icon="arrow-l" data-mini="true"><%= userAddress %></a>
@@ -147,6 +156,7 @@
 	</script>
 	
 	<script type="text/template" id="template-questions">
+		<h2>2012 General Election Ballot Questions</h2>
 		<ol>
 		<% for(i in questions) { %>
 			<li><%= questions[i] %></li>
@@ -172,17 +182,5 @@
 	<script src="js/main.js" type="text/javascript"></script><!-- No need to load this before the page is rendered -->
 	<script src="js/api.js" type="text/javascript"></script>
 	<script src="js/questions.js" type="text/javascript"></script>
-
-	<script type="text/javascript">
-	$("[data-role=page]").live("pageshow", function (event, ui) {
-		try {
-			_gaq.push(["_setAccount", "UA-35850648-3"]);
-			hash = location.hash;
-			if (hash) _gaq.push(["_trackPageview", hash.substr(1)]);
-			else _gaq.push(["_trackPageview"]);
-		} catch(err) {
-		}
-	});
-	</script>
 </body>
 </html>
