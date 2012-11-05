@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = false;
 var cache = {pollingplace: null, candidates: null};
 
 var controller = {
