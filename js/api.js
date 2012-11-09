@@ -1,6 +1,6 @@
 var api = api || {};
 api = {
-	config: {
+    config: {
 		ulrs311: {
 			base: "http://services.phila.gov/ULRS311/Data/" // Ideally this should allow jsonp. ETA 2012-11-11
 			,location: "Location/"
@@ -15,7 +15,8 @@ api = {
 		}
 		,gmaps: {
 			query: "http://maps.google.com/maps?q="
-			,staticmap: "http://maps.googleapis.com/maps/api/staticmap?zoom=17&size={width}x{height}&sensor=false&center={address}&markers={address}"
+			,staticmap: "http://maps.googleapis.com/maps/api/staticmap?zoom=17&size={width}x{height}&sensor=false&center={address}&markers={address}&key="
+			,apiKey: "AIzaSyCmJ45zmFdmbe_j7QtgAXLUTNl1gRFzJl4"
 			,width: 260
 			,height: 200
 		}
@@ -23,6 +24,9 @@ api = {
 			base: "https://www.googleapis.com/civicinfo/us_v1/"
 			,voterinfo: "voterinfo/4000/lookup?fields=contests%2CnormalizedInput%2Cstatus&key="
 			,apiKey: "AIzaSyCmJ45zmFdmbe_j7QtgAXLUTNl1gRFzJl4"
+		}
+		,gdocs: {
+			key: "0AlMaW-4cviLodFdMZGMwWnFUaUoxZjhOMHNQeVE5ckE"
 		}
 	}
 	
@@ -86,6 +90,14 @@ api = {
 	}
 	
 	,getStaticMap: function(address) {
-		return api.config.gmaps.staticmap.replace(/{address}/g, encodeURIComponent(address)).replace("{width}", api.config.gmaps.width).replace("{height}", api.config.gmaps.height);
+		return api.config.gmaps.staticmap.replace(/{address}/g, encodeURIComponent(address)).replace("{width}", api.config.gmaps.width).replace("{height}", api.config.gmaps.height) + api.config.gmaps.apiKey;
+	}
+	
+	// This doesn't really need to be in api.js, but just for consistency's sake...
+	,getGoogleDoc: function(callback) {
+		Tabletop.init({
+			key: api.config.gdocs.key
+			,callback: callback
+		});
 	}
 }
